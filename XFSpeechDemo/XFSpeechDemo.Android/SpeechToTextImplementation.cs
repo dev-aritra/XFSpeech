@@ -51,6 +51,10 @@ namespace XFSpeechDemo.Droid
                 voiceIntent.PutExtra(RecognizerIntent.ExtraLanguage, Java.Util.Locale.Default);
                 _activity.StartActivityForResult(voiceIntent, VOICE);
             }
+            else
+            {
+                throw new Exception("No mic found");
+            }
         }
 
 

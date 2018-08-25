@@ -9,8 +9,15 @@ namespace XFSpeechDemo
         public MainPage()
         {
             InitializeComponent();
-
-            _speechRecongnitionInstance = DependencyService.Get<ISpeechToText>();
+            try
+            {
+                _speechRecongnitionInstance = DependencyService.Get<ISpeechToText>();
+            }
+            catch(Exception ex)
+            {
+                recon.Text = ex.Message;
+            }
+            
             stop.IsEnabled = false;
 
             MessagingCenter.Subscribe<ISpeechToText, string>(this, "STT", (sender, args) =>
@@ -37,7 +44,15 @@ namespace XFSpeechDemo
 
         private void Start_Clicked(object sender, EventArgs e)
         {
-            _speechRecongnitionInstance.StartSpeechToText();
+            try
+            {
+                _speechRecongnitionInstance.StartSpeechToText();
+            }
+            catch(Exception ex)
+            {
+                recon.Text = ex.Message;
+            }
+            
             if (Device.RuntimePlatform == Device.iOS)
             {
                 start.IsEnabled = false;
