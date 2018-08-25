@@ -4,11 +4,28 @@
              xmlns:local="clr-namespace:XFSpeechDemo"
              x:Class="XFSpeechDemo.MainPage">
 
-    <StackLayout>
-
-        <Label Text="Welcome to Xamarin.Forms!" 
+    <StackLayout Margin="10,50,10,10">
+        <Button
+            x:Name="start"
+            Text="Start"
+                Clicked="Start_Clicked"/>
+        <Label 
+            x:Name="recon"
+            Text="Recognized text" 
            HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
+           VerticalOptions="Center" />
+
+        <Button 
+            x:Name="stop"
+            Text="Stop"
+                Clicked="Stop_Clicked">
+            <Button.IsVisible>
+                <OnPlatform x:TypeArguments="x:Boolean"
+                            iOS="True"
+                            Android="False"/>
+            </Button.IsVisible>
+
+        </Button>
     </StackLayout>
 
 </ContentPage>
