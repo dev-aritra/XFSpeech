@@ -15,17 +15,7 @@
            HorizontalOptions="Center"
            VerticalOptions="Center" />
 
-        <Button 
-            x:Name="stop"
-            Text="Stop"
-                Clicked="Stop_Clicked">
-            <Button.IsVisible>
-                <OnPlatform x:TypeArguments="x:Boolean"
-                            iOS="True"
-                            Android="False"/>
-            </Button.IsVisible>
-
-        </Button>
+        
     </StackLayout>
 
 </ContentPage>

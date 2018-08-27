@@ -18,7 +18,6 @@ namespace XFSpeechDemo
                 recon.Text = ex.Message;
             }
             
-            stop.IsEnabled = false;
 
             MessagingCenter.Subscribe<ISpeechToText, string>(this, "STT", (sender, args) =>
             {
@@ -28,7 +27,6 @@ namespace XFSpeechDemo
             MessagingCenter.Subscribe<ISpeechToText>(this, "Final", (sender) =>
             {
                 start.IsEnabled = true;
-                stop.IsEnabled = false;
             });
 
             MessagingCenter.Subscribe<IMessageSender, string>(this, "STT", (sender, args) =>
@@ -58,15 +56,10 @@ namespace XFSpeechDemo
                 start.IsEnabled = false;
             }
 
-            stop.IsEnabled = true;
+            
 
         }
 
-        private void Stop_Clicked(object sender, EventArgs e)
-        {
-            start.IsEnabled = true;
-            stop.IsEnabled = false;
-            _speechRecongnitionInstance.StopSpeechToText();
-        }
+        
     }
 }

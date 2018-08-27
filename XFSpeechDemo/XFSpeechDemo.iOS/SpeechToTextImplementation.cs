@@ -36,8 +36,12 @@ namespace XFSpeechDemo.iOS
 
         public void StopSpeechToText()
         {
-            _audioEngine?.Stop();
-            _recognitionRequest.EndAudio();
+            if(_audioEngine.Running)
+            {
+                _audioEngine?.Stop();
+                _recognitionRequest.EndAudio();
+            }
+            
         }
 
         private void AskForSpeechPermission()
@@ -126,7 +130,7 @@ namespace XFSpeechDemo.iOS
                     {
                         _timer.Invalidate();
                         _timer = null;
-                        _timer = NSTimer.CreateRepeatingScheduledTimer(3, delegate
+                        _timer = NSTimer.CreateRepeatingScheduledTimer(2, delegate
                         {
                             DidFinishTalk();
                         });
