@@ -15,9 +15,8 @@ namespace XFSpeechDemo.iOS
         private SFSpeechAudioBufferRecognitionRequest _recognitionRequest;
         private SFSpeechRecognitionTask _recognitionTask;
         private string _recognizedString;
+        private bool _isAuthorized;
         private NSTimer _timer;
-        private bool isNotContinious = true;
-
 
         public SpeechToTextImplementation()
         {
@@ -36,12 +35,7 @@ namespace XFSpeechDemo.iOS
 
         public void StopSpeechToText()
         {
-            if(_audioEngine.Running)
-            {
-                _audioEngine?.Stop();
-                _recognitionRequest.EndAudio();
-            }
-            
+            StopRecordingAndRecognition();
         }
 
         private void AskForSpeechPermission()
@@ -51,15 +45,14 @@ namespace XFSpeechDemo.iOS
                 switch (status)
                 {
                     case SFSpeechRecognizerAuthorizationStatus.Authorized:
-                        MessagingCenter.Send<ISpeechToText>(this, "Authorized");
+                        _isAuthorized = true;
                         break;
                     case SFSpeechRecognizerAuthorizationStatus.Denied:
-                        throw new Exception("Audio permission denied");
-
+                        break;
                     case SFSpeechRecognizerAuthorizationStatus.NotDetermined:
-                        throw new Exception("Audio permission not available");
+                        break;
                     case SFSpeechRecognizerAuthorizationStatus.Restricted:
-                        throw new Exception("Audio permission denied");
+                        break;
                 }
             });
         }
@@ -83,24 +76,20 @@ namespace XFSpeechDemo.iOS
 
         private void StartRecordingAndRecognizing()
         {
-            if(isNotContinious)
+            _timer = NSTimer.CreateRepeatingScheduledTimer(5, delegate
             {
-                _timer = NSTimer.CreateRepeatingScheduledTimer(5, delegate
-                {
-                    DidFinishTalk();
-                });
-            }
-            
+                DidFinishTalk();
+            });
 
             _recognitionTask?.Cancel();
             _recognitionTask = null;
 
             var audioSession = AVAudioSession.SharedInstance();
             NSError nsError;
-            nsError = audioSession.SetCategory(AVAudioSessionCategory.Record);
-            audioSession.SetMode(AVAudioSession.ModeMeasurement, out nsError);
+            nsError = audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
+            audioSession.SetMode(AVAudioSession.ModeDefault, out nsError);
             nsError = audioSession.SetActive(true, AVAudioSessionSetActiveOptions.NotifyOthersOnDeactivation);
-
+            audioSession.OverrideOutputAudioPort(AVAudioSessionPortOverride.Speaker, out nsError);
             _recognitionRequest = new SFSpeechAudioBufferRecognitionRequest();
 
             var inputNode = _audioEngine.InputNode;
@@ -125,34 +114,38 @@ namespace XFSpeechDemo.iOS
                 {
                     _recognizedString = result.BestTranscription.FormattedString;
                     MessagingCenter.Send<ISpeechToText, string>(this, "STT", _recognizedString);
-                    Console.WriteLine("result");
-                    if(isNotContinious)
+                    _timer.Invalidate();
+                    _timer = null;
+                    _timer = NSTimer.CreateRepeatingScheduledTimer(2, delegate
                     {
-                        _timer.Invalidate();
-                        _timer = null;
-                        _timer = NSTimer.CreateRepeatingScheduledTimer(2, delegate
-                        {
-                            DidFinishTalk();
-                        });
-                    }
-                    
+                        DidFinishTalk();
+                    });
                 }
                 if (error != null || isFinal)
                 {
                     MessagingCenter.Send<ISpeechToText>(this, "Final");
-                    StopRecordingAndRecognition();
+                    StopRecordingAndRecognition(audioSession);
                 }
             });
 
+
+
+
         }
 
-        private void StopRecordingAndRecognition()
+        private void StopRecordingAndRecognition(AVAudioSession aVAudioSession = null)
         {
-            _audioEngine.Stop();
-            _audioEngine.InputNode.RemoveTapOnBus(0);
-            _recognitionTask?.Cancel();
-            _recognitionRequest = null;
-            _recognitionTask = null;
+            if (_audioEngine.Running)
+            {
+                _audioEngine.Stop();
+                _audioEngine.InputNode.RemoveTapOnBus(0);
+                _recognitionTask?.Cancel();
+                _recognitionRequest.EndAudio();
+                _recognitionRequest = null;
+                _recognitionTask = null;
+            }
+
+
         }
 
 
