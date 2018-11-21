@@ -1,7 +1,7 @@
 # Speech Recognizer
 Sample app on Xamarin forms speech to text, using platform APIs and Xamarin Messaging Center, running on Android and iOS
 
-![Screenshot](https://github.com/dev-aritra/XFSpeech/blob/master/XFSpeechDemo/pic/andsc.png)
+![Screenshot](https://github.com/dev-aritra/XFSpeech/blob/master/pic/andsc.png)
 
 ## How to build
 Read the compleget guide here
