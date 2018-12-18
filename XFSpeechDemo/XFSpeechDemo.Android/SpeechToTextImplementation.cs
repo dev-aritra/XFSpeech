@@ -38,7 +38,9 @@ namespace XFSpeechDemo.Droid
             string rec = global::Android.Content.PM.PackageManager.FeatureMicrophone;
             if (rec == "android.hardware.microphone")
             {
-                var voiceIntent = new Intent(RecognizerIntent.ActionRecognizeSpeech);
+				try
+				{
+					var voiceIntent = new Intent(RecognizerIntent.ActionRecognizeSpeech);
                 voiceIntent.PutExtra(RecognizerIntent.ExtraLanguageModel, RecognizerIntent.LanguageModelFreeForm);
 
 
@@ -50,6 +52,23 @@ namespace XFSpeechDemo.Droid
                 voiceIntent.PutExtra(RecognizerIntent.ExtraMaxResults, 1);
                 voiceIntent.PutExtra(RecognizerIntent.ExtraLanguage, Java.Util.Locale.Default);
                 _activity.StartActivityForResult(voiceIntent, VOICE);
+				}
+				catch(ActivityNotFoundException ex)
+                {
+                    String appPackageName = "com.google.android.googlequicksearchbox";
+                    try
+                    {
+                        Intent intent = new Intent(Intent.ActionView, global::Android.Net.Uri.Parse("market://details?id=" + appPackageName));
+                        _activity.StartActivityForResult(intent, VOICE);
+                        
+                    }
+                    catch (ActivityNotFoundException e)
+                    {
+                        Intent intent = new Intent(Intent.ActionView, global::Android.Net.Uri.Parse("https://play.google.com/store/apps/details?id=" + appPackageName));
+                        _activity.StartActivityForResult(intent, VOICE);
+                    }
+                }
+                
             }
             else
             {
