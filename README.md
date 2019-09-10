@@ -4,8 +4,8 @@ Sample app on Xamarin forms speech to text, using platform APIs and Xamarin Mess
 ![Screenshot](https://github.com/dev-aritra/XFSpeech/blob/master/pic/andsc.png)
 
 ## How to build
-Read the compleget guide here
-https://gameofthreads.online/cross-platform-speech-recognition-using-xamarin-forms/
+Read the compleget guide here</br>
+https://medium.com/@dev.aritradas/xamarin-forms-speech-recognition-c16f07cdf164
 
 ## Features
 1. Recognizes speech 
@@ -16,4 +16,4 @@ https://gameofthreads.online/cross-platform-speech-recognition-using-xamarin-for
 
 ## Author
 
-* **Aritra Das** - *Blog* - [GameOfThreads](https://gameofthreads.online/)
+* **Aritra Das** -[twitter](https://twitter.com/aritra__das)
