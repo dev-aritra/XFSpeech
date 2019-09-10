@@ -16,4 +16,4 @@ https://medium.com/@dev.aritradas/xamarin-forms-speech-recognition-c16f07cdf164
 
 ## Author
 
-* **Aritra Das** -[twitter](https://twitter.com/aritra__das)
+* **Aritra Das** - [twitter](https://twitter.com/aritra__das)
